@@ -102,7 +102,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
     return Consumer<DropdownProvider>(
       builder: (context, dropdownProvider, child) {
         return DropdownButtonFormField<String>(
-          value: dropdownProvider.selectedRole,
+          initialValue: dropdownProvider.selectedRole,
           hint: Text(widget.hintText),
           items: businessRoles.map((role) {
             return DropdownMenuItem(
