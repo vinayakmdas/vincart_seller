@@ -3,6 +3,7 @@
 import 'package:ecommerce_seller/features/auth/login/provider/obsecure_provider.dart';
 import 'package:ecommerce_seller/features/auth/login/screens/webviewlogin/webLogin.dart';
 import 'package:ecommerce_seller/features/auth/login/widget/login%20loading.dart';
+import 'package:ecommerce_seller/features/auth/signup/provider/checkbox_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/dropdown_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/signup_loading.dart';
 import 'package:ecommerce_seller/features/drawer/provider/drawer_provider.dart';
@@ -27,6 +28,7 @@ try {
   
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_)=>CheckboxProvider()),
          ChangeNotifierProvider(create: (_)=>DropdownProvider()),
            ChangeNotifierProvider(create: (_)=> SignupLoading()),
         ChangeNotifierProvider(create: (_)=>LoadingProvider()),
@@ -50,8 +52,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: WebLoginScreen(),
-      // home:  WebViewSignUp(),
-      // home:  WaitingScreen(),
+
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
