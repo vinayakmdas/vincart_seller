@@ -5,6 +5,7 @@ import 'package:ecommerce_seller/features/drawer/provider/drawer_provider.dart';
 import 'package:ecommerce_seller/features/order_mangement/Screen/order_screen.dart';
 import 'package:ecommerce_seller/features/product_management/screen/product_menagement.dart';
 import 'package:ecommerce_seller/features/return&refund/screens/refunf&retun_screen.dart';
+import 'package:ecommerce_seller/theme/app_custome_colour.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -44,10 +45,10 @@ class HomeScreen extends StatelessWidget {
 
     final menuItems = [
       SideMenuItems(title: "Dashboard", icon: Icons.dashboard, pageTitle: "Dashboard Overview"),
-      SideMenuItems(title: "Add Product", icon: Icons.supervised_user_circle_outlined, pageTitle: "User Management"),
-      SideMenuItems(title: "Product Management", icon: Icons.add_business_sharp, pageTitle: "Seller Management"),
-      SideMenuItems(title: "Order Details", icon: Icons.headset_mic_outlined, pageTitle: "Customer Service"),
-      SideMenuItems(title: "Refund and Return Details", icon: Icons.shopping_cart, pageTitle: "Order Details"),
+      SideMenuItems(title: "Add Product", icon: Icons.supervised_user_circle_outlined, pageTitle: "Add Product"),
+      SideMenuItems(title: "Product Management", icon: Icons.add_business_sharp, pageTitle: "Product Management"),
+      SideMenuItems(title: "Order Details", icon: Icons.headset_mic_outlined, pageTitle: "Order Details"),
+      SideMenuItems(title: "Refund and Return Details", icon: Icons.shopping_cart, pageTitle: "Refund and Return Details"),
     ];
 
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -59,12 +60,27 @@ class HomeScreen extends StatelessWidget {
         title: Text(
           menuItems[sideMenu.selectedIndex].pageTitle,
           style: GoogleFonts.cormorantGaramond(
-            color: Colors.blue,
+            
             fontWeight: FontWeight.w600,
           ),
+
+          
         ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color(0xFFEC4899)), // menu icon color
+      actions: [
+        IconButton(onPressed: (){
+          
+        }, icon: Icon(Icons.arrow_drop_down_circle_rounded)),
+     
+      ],
+        foregroundColor: Colors.white,
+        backgroundColor:Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient:  LinearGradient(colors:  [ Color(0xFF6B21A8), Color(0xFFEC4899), Color(0xFF6B21A8)])
+          ),
+        ),
+        iconTheme: const IconThemeData(color:  Colors.white), // menu icon color
         leading: IconButton(
           icon: const Icon(Icons.menu_rounded),
           onPressed: () {
@@ -73,34 +89,57 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      // Drawer Section
-      drawer: Drawer(
-        backgroundColor: const Color(0xFF1A1A1A), // dark background for contrast
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-          itemCount: menuItems.length,
-          itemBuilder: (context, index) {
-            final item = menuItems[index];
-            return ListTile(
-              leading: Icon(item.icon, color: Colors.white),
-              title: Text(
-                item.title,
-                style: GoogleFonts.cormorantGaramond(
-                  color: Colors.grey.shade300,
-                  fontSize: 18,
-                ),
+  drawer: Drawer(
+  backgroundColor: Colors.white, // dark background for contrast
+  child: ListView.separated(
+    padding: const EdgeInsets.symmetric(vertical: 20),
+    separatorBuilder: (context, index) => const SizedBox(height: 8),
+    itemCount: menuItems.length,
+    itemBuilder: (context, index) {
+      final item = menuItems[index];
+      final isSelected = index == sideMenu.selectedIndex;
+
+      return GestureDetector(
+        onTap: () {
+          context.read<DrawerProvider>().onMenuButton(index);
+          Navigator.pop(context); // close drawer
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            gradient: isSelected
+                ? const LinearGradient(
+                    colors: [
+                      Color(0xFF6B21A8), // purple
+                      Color(0xFFEC4899), // pink
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  )
+                : null,
+            color: isSelected ? null : Colors.transparent,
+          ),
+          child: ListTile(
+            leading: Icon(
+              item.icon,
+              color: isSelected ? Colors.white : Color(0xFFEC4899), 
+            ),
+            title: Text(
+              item.title,
+              style: GoogleFonts.cormorantGaramond(
+                color: isSelected ? Colors.white : Color(0xFFEC4899),
+                fontSize: 18,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-              selected: index == sideMenu.selectedIndex,
-              selectedTileColor: const Color(0xFFEC4899).withOpacity(0.2),
-              onTap: () {
-                context.read<DrawerProvider>().onMenuButton(index);
-                Navigator.pop(context); // close drawer
-              },
-            );
-          },
+            ),
+          ),
         ),
-      ),
+      );
+    },
+  ),
+),
+
 
       // Body Section
       body: _buildScreen(sideMenu.selectedIndex),
