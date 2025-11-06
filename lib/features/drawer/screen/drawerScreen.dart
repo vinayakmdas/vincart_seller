@@ -5,13 +5,12 @@ import 'package:ecommerce_seller/features/drawer/provider/drawer_provider.dart';
 import 'package:ecommerce_seller/features/order_mangement/Screen/order_screen.dart';
 import 'package:ecommerce_seller/features/product_management/screen/product_menagement.dart';
 import 'package:ecommerce_seller/features/return&refund/screens/refunf&retun_screen.dart';
-import 'package:ecommerce_seller/theme/app_custome_colour.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class Drawerscreen extends StatelessWidget {
+  const Drawerscreen({super.key});
 
   // Choose screen based on index
   Widget _buildScreen(int index) {

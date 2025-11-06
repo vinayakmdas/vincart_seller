@@ -93,8 +93,8 @@ class WebViewSignUp extends StatelessWidget {
                       child: Column(
                         children: [
                           Image.asset(
-                            "asset/logo_black.png",
-                            height: screenheight * 0.42,
+                            "asset/vincart logo.png",
+                            height: screenheight * 0.32,
                             fit: BoxFit.contain,
                           ),
                           Transform.translate(

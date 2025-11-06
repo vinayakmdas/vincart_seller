@@ -1,7 +1,9 @@
 
 // import 'package:ecommerce_seller/features/auth/signup/screens/webviewSignUp/webviewSignUp.dart';
+import 'package:ecommerce_seller/features/addProduct/provider/branList_provider.dart';
+import 'package:ecommerce_seller/features/addProduct/screens/addProduct_screen.dart';
 import 'package:ecommerce_seller/features/auth/login/provider/obsecure_provider.dart';
-import 'package:ecommerce_seller/features/auth/login/widget/login%20loading.dart';
+import 'package:ecommerce_seller/features/auth/login/provider/login%20loading.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/checkbox_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/dropdown_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/signup_loading.dart';
@@ -34,6 +36,7 @@ try {
         ChangeNotifierProvider(create: (_)=>LoadingProvider()),
         ChangeNotifierProvider(create: (_)=>ObscureControlling()),
         ChangeNotifierProvider(create: (_) => DrawerProvider()),
+         ChangeNotifierProvider(create: (_) =>BrandListProvider() ,child:  Addproduct(),),
         // add more providers here if needed
         
       ],

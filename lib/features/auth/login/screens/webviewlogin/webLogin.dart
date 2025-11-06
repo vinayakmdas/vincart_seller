@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_seller/features/auth/login/widget/login%20loading.dart';
+import 'package:ecommerce_seller/features/auth/login/provider/login%20loading.dart';
 // import 'package:ecommerce_seller/features/auth/login/provider/obsecure_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/screens/webviewSignUp/webviewSignUp.dart';
 import 'package:ecommerce_seller/features/auth/signup/widget/custome_textformfield.dart';
 import 'package:ecommerce_seller/features/auth/signup/widget/submit_button.dart';
+// import 'package:ecommerce_seller/features/dashboard/screen/dashboard.dart';
 import 'package:ecommerce_seller/features/drawer/screen/drawerScreen.dart';
 import 'package:ecommerce_seller/theme/apptext.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +43,7 @@ class WebLoginScreen extends StatelessWidget {
                     children: [
                       // 🖼 Logo image
                       Image.asset(
-                        "asset/logo_black.png",
+                        "asset/vincart logo.png",
                         height: screenHeight * 0.35,
                         fit: BoxFit.contain,
                       ),
@@ -153,7 +154,7 @@ class WebLoginScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const HomeScreen(),
+                                            const Drawerscreen(),
                                       ),
                                     );
                                   }
