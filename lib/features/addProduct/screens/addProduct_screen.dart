@@ -9,16 +9,18 @@ class Addproduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: AppColour.scaffoldBgColor ,
-      body: Center(
-        child: Column(
-          children: [
-        AddproduictCustome.publishButton(),
-       
-        AddproduictCustome.requiredProductDetails(context)
-
-          ],
-        )
-    )
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+          AddproduictCustome.publishButton(),
+         
+          AddproduictCustome.requiredProductDetails(context),
+    
+            ],
+          )
+            ),
+      )
     );
   }
 }
