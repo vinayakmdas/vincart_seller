@@ -169,19 +169,19 @@ class VariationCustome {
               ),
             ),
             onPressed: () {
-              final variant = VariantModel(
-                selectedOptions: Map.from(dialogProvider.selectedOptions),
-                size: dialogProvider.selectedOptions.values.firstWhere(
-                  (v) => v.contains(RegExp(r'[smlx0-9]')),
-                  orElse: () => '',
-                ),
-                color: dialogProvider.selectedOptions['attr_color'] ?? '',
-                images: dialogProvider.images.map((e) => e.path ?? '').toList(),
-                regularPrise:
-                    num.tryParse(dialogProvider.regularPrise.text) ?? 0,
-                price: num.tryParse(dialogProvider.salePrise.text) ?? 0,
-                quantity: int.tryParse(dialogProvider.qtyCtrl.text) ?? 0,
-              );
+             final variant = VariantModel(
+  selectedOptions: Map.from(dialogProvider.selectedOptions),
+  size: dialogProvider.selectedOptions.values.firstWhere(
+    (v) => v.contains(RegExp(r'[smlx0-9]')),
+    orElse: () => '',
+  ),
+  color: dialogProvider.selectedOptions['attr_color'] ?? '',
+  images: List.from(dialogProvider.imagesUrl), // ✅ Cloudinary URLs only
+  regularPrise: num.tryParse(dialogProvider.regularPrise.text) ?? 0,
+  price: num.tryParse(dialogProvider.salePrise.text) ?? 0,
+  quantity: int.tryParse(dialogProvider.qtyCtrl.text) ?? 0,
+);
+
 
               Provider.of<VariantProvider>(
                 context,
