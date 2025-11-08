@@ -19,9 +19,10 @@ final List<PlatformFile> images = [];
   Future<void> pickSingleImage() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image,
+      allowMultiple: false,
     );
 
-    if (result != null) {
+    if  (result != null && result.files.isNotEmpty)  {
       images.add(result.files.single);
       notifyListeners();
     }

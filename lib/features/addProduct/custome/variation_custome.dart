@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:ecommerce_seller/features/addProduct/model/variant_model.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_custome_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/category_provider.dart';
+import 'package:ecommerce_seller/features/addProduct/provider/variant_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -137,6 +139,44 @@ class VariationCustome {
             ),
           ],
         ),
+        // ⬇️ ADD this at the bottom of the Column inside variationList()
+
+const SizedBox(height: 16),
+
+Center(
+  child: ElevatedButton.icon(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.deepPurple,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+    onPressed: () {
+      final variant = VariantModel(
+        selectedOptions: Map.from(dialogProvider.selectedOptions),
+        size: dialogProvider.selectedOptions.values.firstWhere(
+          (v) => v.contains(RegExp(r'[smlx0-9]')),
+          orElse: () => '',
+        ),
+        color: dialogProvider.selectedOptions['attr_color'] ?? '',
+        images: dialogProvider.images.map((e) => e.path ?? '').toList(),
+        regularPrise: num.tryParse(dialogProvider.regularPrise.text) ?? 0,
+        price: num.tryParse(dialogProvider.salePrise.text) ?? 0,
+        quantity: int.tryParse(dialogProvider.qtyCtrl.text) ?? 0,
+      );
+
+      Provider.of<VariantProvider>(context, listen: false).addVariant(variant);
+
+      dialogProvider.clearAll();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Variant added successfully')),
+      );
+    },
+    icon: const Icon(Icons.add),
+    label: const Text("Add Variant"),
+  ),
+),
+
       ],
     );
   }
