@@ -7,7 +7,7 @@ class BrandListProvider with ChangeNotifier {
   bool isloading = true;
 
   BrandListProvider() {
-    // Auto-fetch when provider is first created
+
     fetchBrands();
   }
 
