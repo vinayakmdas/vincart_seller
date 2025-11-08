@@ -2,6 +2,7 @@
 // import 'package:ecommerce_seller/features/auth/signup/screens/webviewSignUp/webviewSignUp.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/branList_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/category_provider.dart';
+import 'package:ecommerce_seller/features/addProduct/provider/uploading_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_custome_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/screens/addProduct_screen.dart';
@@ -42,6 +43,7 @@ try {
          ChangeNotifierProvider(create: (_) =>BrandListProvider() ,child:  Addproduct(),),
           ChangeNotifierProvider(create: (_) =>CategoryProvider() ,child:  Addproduct(),),
           ChangeNotifierProvider(create: (_) => VariantProvider()),
+          ChangeNotifierProvider(create: (_) => ProductUploadProvider()),
 ChangeNotifierProvider(create: (_) => VariationCustomeProvider()),
         // add more providers here if needed
         

@@ -36,7 +36,7 @@ class _AddproductState extends State<Addproduct> {
         child: Center(
           child: Column(
             children: [
-              AddproduictCustome.publishButton(),
+              AddproduictCustome.publishButton(context),
               AddproduictCustome.requiredProductDetails(context),
             ],
           ),

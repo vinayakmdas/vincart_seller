@@ -3,11 +3,14 @@ import 'package:ecommerce_seller/features/addProduct/model/variant_model.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_custome_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/category_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_provider.dart';
+import 'package:ecommerce_seller/theme/app_custome_colour.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class VariationCustome {
+
+  
   static Widget variationList(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
     final dialogProvider = Provider.of<VariationCustomeProvider>(context);
@@ -15,7 +18,10 @@ class VariationCustome {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Add Variant", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const Text(
+          "Add Variant",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
 
         // 🔹 Attributes (color, size, etc.)
@@ -23,12 +29,16 @@ class VariationCustome {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(attr.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                attr.name,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 children: attr.options.map((option) {
-                  final selected = dialogProvider.selectedOptions[attr.id] == option;
+                  final selected =
+                      dialogProvider.selectedOptions[attr.id] == option;
                   return ChoiceChip(
                     label: Text(option),
                     selected: selected,
@@ -43,41 +53,44 @@ class VariationCustome {
           );
         }),
 
-       Row(
-        children: [
-           // 🔹 Price fields
-        Expanded(
-          child: TextField(
-            controller: dialogProvider.regularPrise,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: "Regular Price"),
-          ),
+        Row(
+          children: [
+            // 🔹 Price fields
+            Expanded(
+              child: TextField(
+                controller: dialogProvider.regularPrise,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Regular Price"),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: TextField(
+                controller: dialogProvider.salePrise,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Sale Price"),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: TextField(
+                controller: dialogProvider.qtyCtrl,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Quantity"),
+              ),
+            ),
+          ],
         ),
-         const SizedBox(width: 20),
-        Expanded(
-          child: TextField(
-            controller: dialogProvider.salePrise,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: "Sale Price"),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextField(
-            controller: dialogProvider.qtyCtrl,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: "Quantity"),
-          ),
-        ),
-        ],
-       ),
 
         const SizedBox(height: 16),
 
         // 🔹 Image Picker Section
-        const Text("Product Images", style: TextStyle(fontWeight: FontWeight.bold)),
+        const Text(
+          "Product Images",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
-       Wrap(
+        Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
@@ -113,7 +126,11 @@ class VariationCustome {
                           color: Colors.black54,
                         ),
                         padding: const EdgeInsets.all(4),
-                        child: const Icon(Icons.close, color: Colors.white, size: 16),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -139,44 +156,47 @@ class VariationCustome {
             ),
           ],
         ),
+
         // ⬇️ ADD this at the bottom of the Column inside variationList()
+        const SizedBox(height: 16),
 
-const SizedBox(height: 16),
+        Center(
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              final variant = VariantModel(
+                selectedOptions: Map.from(dialogProvider.selectedOptions),
+                size: dialogProvider.selectedOptions.values.firstWhere(
+                  (v) => v.contains(RegExp(r'[smlx0-9]')),
+                  orElse: () => '',
+                ),
+                color: dialogProvider.selectedOptions['attr_color'] ?? '',
+                images: dialogProvider.images.map((e) => e.path ?? '').toList(),
+                regularPrise:
+                    num.tryParse(dialogProvider.regularPrise.text) ?? 0,
+                price: num.tryParse(dialogProvider.salePrise.text) ?? 0,
+                quantity: int.tryParse(dialogProvider.qtyCtrl.text) ?? 0,
+              );
 
-Center(
-  child: ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.deepPurple,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    ),
-    onPressed: () {
-      final variant = VariantModel(
-        selectedOptions: Map.from(dialogProvider.selectedOptions),
-        size: dialogProvider.selectedOptions.values.firstWhere(
-          (v) => v.contains(RegExp(r'[smlx0-9]')),
-          orElse: () => '',
+              Provider.of<VariantProvider>(
+                context,
+                listen: false,
+              ).addVariant(variant);
+
+              dialogProvider.clearAll();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Variant added successfully')),
+              );
+            },
+            icon: const Icon(Icons.add),
+            label:  Text("Add Variant",style: TextStyle(color: AppColour.whitecolor),),
+          ),
         ),
-        color: dialogProvider.selectedOptions['attr_color'] ?? '',
-        images: dialogProvider.images.map((e) => e.path ?? '').toList(),
-        regularPrise: num.tryParse(dialogProvider.regularPrise.text) ?? 0,
-        price: num.tryParse(dialogProvider.salePrise.text) ?? 0,
-        quantity: int.tryParse(dialogProvider.qtyCtrl.text) ?? 0,
-      );
-
-      Provider.of<VariantProvider>(context, listen: false).addVariant(variant);
-
-      dialogProvider.clearAll();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Variant added successfully')),
-      );
-    },
-    icon: const Icon(Icons.add),
-    label: const Text("Add Variant"),
-  ),
-),
-
       ],
     );
   }

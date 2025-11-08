@@ -1,19 +1,23 @@
 
 import 'package:ecommerce_seller/features/addProduct/custome/variation_custome.dart';
+import 'package:ecommerce_seller/features/addProduct/model/product_model.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/branList_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/category_provider.dart';
+import 'package:ecommerce_seller/features/addProduct/provider/uploading_provider.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/variant_provider.dart';
 import 'package:ecommerce_seller/theme/app_custome_colour.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddproduictCustome {
   static String? selectCategory;
   List<String> brandList = [];
-
+static TextEditingController productnameController = TextEditingController();
+static TextEditingController descriptionControler = TextEditingController();
   //^add publish button
 
-  static Widget publishButton() {
+  static Widget publishButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 20, top: 40),
       child: Row(
@@ -33,7 +37,47 @@ class AddproduictCustome {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {},
+             
+
+                onPressed: () async {
+  final variantProvider = Provider.of<VariantProvider>(context, listen: false);
+  final uploadProvider = Provider.of<ProductUploadProvider>(context, listen: false);
+  final brandlist = Provider.of<BrandListProvider>(context, listen: false);
+
+  if (variantProvider.variants.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please add at least one variant.")),
+    );
+    return;
+  }
+
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please log in first.")),
+    );
+    return;
+  }
+
+final product = ProductModel(
+  productName: productnameController.text.trim(),
+  description: descriptionControler.text.trim(),
+  brandId: brandlist.slectedbrand ?? '',
+  categoryId: AddproduictCustome.selectCategory ?? '',
+  sellerId: user.uid,
+  createdAt: DateTime.now(),
+  variants: variantProvider.variants,
+);
+
+  await uploadProvider.uploadProduct(product);
+  variantProvider.clear();
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("✅ Product uploaded successfully!")),
+  );
+},
+
+            
               child: Text(
                 "Publish Product",
                 style: TextStyle(color: AppColour.whitecolor),
@@ -102,6 +146,7 @@ class AddproduictCustome {
                         const SizedBox(height: 8),
 
                         TextFormField(
+                          controller:productnameController ,
                           decoration: InputDecoration(
                             hintText: "eg .Premium Cotton T-Shirt",
                             labelStyle: const TextStyle(color: Colors.black87),
@@ -150,10 +195,12 @@ class AddproduictCustome {
                         SizedBox(height: 8),
                         // ^ Big text box for product description
                         TextFormField(
+                          
                           maxLines: 5,
                           minLines: 3,
                           keyboardType: TextInputType.multiline,
                           textInputAction: TextInputAction.newline,
+                          controller:  descriptionControler,
                           decoration: InputDecoration(
                             hintText: "Enter product description here...",
                             alignLabelWithHint: true,
@@ -201,166 +248,7 @@ class AddproduictCustome {
                 ),
                 //^pricing and invendory
                 SizedBox(height: 23),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColour.whitecolor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Pricing and Inventory",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 25),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Regular Price",
-                                style: TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: Text(
-                                "Sale Price",
-                                style: TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: Text(
-                                "Stock Count",
-                                style: TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 25),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "0.00",
-                                  labelStyle: const TextStyle(
-                                    color: Colors.black87,
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                    horizontal: 12,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: AppColour.greycolor,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                ),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "0.00",
-                                  labelStyle: const TextStyle(
-                                    color: Colors.black87,
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                    horizontal: 12,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: AppColour.greycolor,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                ),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "20",
-                                  labelStyle: const TextStyle(
-                                    color: Colors.black87,
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                    horizontal: 12,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: AppColour.greycolor,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                ),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+               
 
               
                 //^Variants Section
@@ -406,39 +294,36 @@ Consumer<CategoryProvider>(
             const SizedBox(height: 20),
 
             // ^ List of Added Variants
-            Consumer<VariantProvider>(
-              builder: (context, variantProvider, _) {
-                if (variantProvider.variants.isEmpty) {
-                  return const Text("No variants added yet",
-                      style: TextStyle(color: Colors.grey));
-                }
+          Consumer<VariantProvider>(
+  builder: (context, variantProvider, _) {
+    if (variantProvider.variants.isEmpty) {
+      return const Text("No variants added yet");
+    }
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: variantProvider.variants.length,
-                  itemBuilder: (context, index) {
-                    final variant = variantProvider.variants[index];
-                    final selectedOptions =
-                        variant.selectedOptions.values.join(" / ");
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      child: ListTile(
-                        title: Text(selectedOptions),
-                        subtitle: Text(
-                            "₹${variant.price} • Qty: ${variant.quantity}"),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            variantProvider.removeVariant(index);
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                );
+    return Column(
+      children: variantProvider.variants.map((variant) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          child: ListTile(
+            title: Text(
+                "Size: ${variant.size}, Color: ${variant.color}, Price: ₹${variant.price}"),
+            subtitle: Text("Qty: ${variant.quantity}"),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                final provider =
+                    Provider.of<VariantProvider>(context, listen: false);
+                final index = variantProvider.variants.indexOf(variant);
+                provider.removeVariant(index);
               },
             ),
+          ),
+        );
+      }).toList(),
+    );
+  },
+),
+
           ],
         ),
       ),
