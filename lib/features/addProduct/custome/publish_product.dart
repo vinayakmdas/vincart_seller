@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_seller/features/addProduct/custome/variation_custome.dart';
 import 'package:ecommerce_seller/features/addProduct/model/product_model.dart';
 import 'package:ecommerce_seller/features/addProduct/provider/branList_provider.dart';
@@ -51,22 +52,46 @@ static TextEditingController descriptionControler = TextEditingController();
     return;
   }
 
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) {
+  final sellerUid = FirebaseAuth.instance.currentUser;
+  if (sellerUid == null) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Please log in first.")),
     );
     return;
   }
+  
+Future<String> getSellerName(String sellerUid) async {
+  try {
+    final doc = await FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(sellerUid)
+        .get();
 
+    if (doc.exists) {
+      return doc.data()?['sellerName'] ?? "Unknown Seller";
+    } else {
+      return "Unknown Seller";
+    }
+  } catch (e) {
+    print("Error fetching seller name: $e");
+    return "Unknown Seller";
+  }
+}
+
+ 
+ final uid = FirebaseAuth.instance.currentUser;
+final sellerName = await getSellerName(uid!.uid);
+ print("seller name : $sellerName");
 final product = ProductModel(
+  sellerName:   sellerName.toString(),
   productName: productnameController.text.trim(),
   description: descriptionControler.text.trim(),
   brandId: brandlist.slectedbrand ?? '',
   categoryId: AddproduictCustome.selectCategory ?? '',
-  sellerId: user.uid,
+  sellerId: sellerUid.uid,
   createdAt: DateTime.now(),
   variants: variantProvider.variants,
+  status:  "active"
 );
 
   await uploadProvider.uploadProduct(product);
@@ -430,15 +455,31 @@ Consumer<CategoryProvider>(
                       Consumer<CategoryProvider>(
                         builder: (context, provider, child) {
                           return DropdownButtonFormField(
+
+
+                            
                             initialValue: selectCategory,
-                            decoration: InputDecoration(
+                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: AppColour.greycolor,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              hint: Text("Select Category"),
+                              hint: Text(
+                                "Select Category",
+                                style: TextStyle(color: AppColour.greycolor),
+                              ),
+
+                              fillColor: AppColour.whitecolor,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColour.greycolor,
+                                ),
+
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                             items: provider.categoryList.map((category) {
                               return DropdownMenuItem(

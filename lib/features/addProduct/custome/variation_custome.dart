@@ -6,6 +6,7 @@ import 'package:ecommerce_seller/features/addProduct/provider/variant_provider.d
 import 'package:ecommerce_seller/theme/app_custome_colour.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class VariationCustome {
@@ -50,33 +51,63 @@ class VariationCustome {
               ),
               const SizedBox(height: 12),
             ],
-          );
+          ); 
         }),
-
+ SizedBox(height:16),
         Row(
           children: [
             // 🔹 Price fields
             Expanded(
               child: TextField(
+                  
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
                 controller: dialogProvider.regularPrise,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "Regular Price"),
+                decoration:  InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius:  BorderRadius.circular(12)
+                    
+                    ),
+                    
+                  labelText: "Regular Price"),
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
               child: TextField(
+                  inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
                 controller: dialogProvider.salePrise,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "Sale Price"),
+                decoration:  InputDecoration(
+                     border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius:  BorderRadius.circular(12)
+                    
+                    ),
+                  labelText: "Sale Price"),
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
+              
               child: TextField(
+                  inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
                 controller: dialogProvider.qtyCtrl,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "Quantity"),
+                decoration:  InputDecoration(
+                     border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius:  BorderRadius.circular(12)
+                    
+                    ),
+                  labelText: "Quantity"),
               ),
             ),
           ],

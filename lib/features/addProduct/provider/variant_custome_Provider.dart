@@ -10,7 +10,7 @@ class VariationCustomeProvider extends ChangeNotifier {
   final TextEditingController salePrise = TextEditingController();
 
   final Map<String, String> selectedOptions = {};
-  final List<String> imagesUrl = []; // ✅ store Cloudinary URLs
+  final List<String> imagesUrl = [];
   final List<PlatformFile> images = [];
 
 
