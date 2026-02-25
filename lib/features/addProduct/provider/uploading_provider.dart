@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 
 class ProductUploadProvider extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<void> uploadProduct(ProductModel product) async {
     try {
-      await _firestore.collection('products').add(product.toMap());
+      await _firestore
+          .collection('products')
+          .doc(product.productId)   // ✅ use same ID
+          .set(product.toMap());
+
       debugPrint("✅ Product uploaded successfully!");
     } catch (e) {
       debugPrint("❌ Error uploading product: $e");

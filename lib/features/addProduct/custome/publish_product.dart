@@ -12,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddproduictCustome {
-  static String? selectCategory;
+  static String? selectedCategoryId;
+static String? selectedCategoryName;
   List<String> brandList = [];
 static TextEditingController productnameController = TextEditingController();
 static TextEditingController descriptionControler = TextEditingController();
@@ -82,12 +83,19 @@ Future<String> getSellerName(String sellerUid) async {
  final uid = FirebaseAuth.instance.currentUser;
 final sellerName = await getSellerName(uid!.uid);
  print("seller name : $sellerName");
+ final docRef = FirebaseFirestore.instance
+    .collection("products")
+    .doc();
+
 final product = ProductModel(
+  productId: docRef.id ,
+  category: AddproduictCustome.selectedCategoryName ?? '',
   sellerName:   sellerName.toString(),
   productName: productnameController.text.trim(),
   description: descriptionControler.text.trim(),
   brandId: brandlist.slectedbrand ?? '',
-  categoryId: AddproduictCustome.selectCategory ?? '',
+  categoryId: AddproduictCustome.selectedCategoryId ?? '',
+  
   sellerId: sellerUid.uid,
   createdAt: DateTime.now(),
   variants: variantProvider.variants,
@@ -458,7 +466,7 @@ Consumer<CategoryProvider>(
 
 
                             
-                            initialValue: selectCategory,
+                            initialValue: AddproduictCustome.selectedCategoryId,
                            decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -487,14 +495,19 @@ Consumer<CategoryProvider>(
                                 child: Text(category.name),
                               );
                             }).toList(),
-                            onChanged: (value) async {
-                              AddproduictCustome.selectCategory = value;
-                              final selectedCat = provider.categoryList
-                                  .firstWhere((cat) => cat.id == value);
-                              await provider.fetchAttributesForCategory(
-                                selectedCat,
-                              );
-                            },
+                           onChanged: (value) async {
+
+  // Find full category object using ID
+  final selectedCat = provider.categoryList
+      .firstWhere((cat) => cat.id == value);
+
+  // Store BOTH
+  AddproduictCustome.selectedCategoryId = selectedCat.id;
+  AddproduictCustome.selectedCategoryName = selectedCat.name;
+
+  await provider.fetchAttributesForCategory(selectedCat);
+},
+
                           );
                         },
                       ),

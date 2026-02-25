@@ -1,18 +1,22 @@
 import 'variant_model.dart';
 
 class ProductModel {
+  final String productId;
   final String sellerName;
   final String productName;
   final String description;
   final String brandId;
   final String categoryId;
   final String sellerId;
+  final String category;
   final DateTime createdAt;
   final List<VariantModel> variants;
   final String status;
   
 
   ProductModel({
+    required this.productId,
+    required this.category,
     required this.sellerName,
     required this.productName,
     required this.description,
@@ -26,6 +30,8 @@ class ProductModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'productId' : productId,
+      'category' : category,
       'sellerName': sellerName,
       'productName': productName,
       'description': description,

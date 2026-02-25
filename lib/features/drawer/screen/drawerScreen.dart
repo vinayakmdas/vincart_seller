@@ -1,4 +1,5 @@
 import 'package:ecommerce_seller/features/addProduct/screens/addProduct_screen.dart';
+import 'package:ecommerce_seller/features/chat/screen/chat_list_screen.dart';
 import 'package:ecommerce_seller/features/dashboard/screen/dashboard.dart';
 import 'package:ecommerce_seller/features/drawer/model/drawe_Mode.dart';
 import 'package:ecommerce_seller/features/drawer/provider/drawer_provider.dart';
@@ -25,7 +26,10 @@ class Drawerscreen extends StatelessWidget {
         return OrderScreen();
       case 4:
         return RefunfRetunScreen();
-      default:
+
+        case 5 : 
+      return SellerChatListScreen();
+            default:
         return Center(
           child: Text(
             "Unknown Screen",
@@ -48,6 +52,7 @@ class Drawerscreen extends StatelessWidget {
       SideMenuItems(title: "Product Management", icon: Icons.add_business_sharp, pageTitle: "Product Management"),
       SideMenuItems(title: "Order Details", icon: Icons.headset_mic_outlined, pageTitle: "Order Details"),
       SideMenuItems(title: "Refund and Return Details", icon: Icons.shopping_cart, pageTitle: "Refund and Return Details"),
+          SideMenuItems(title: "Chat", icon: Icons.shopping_cart, pageTitle: "Chat"),
     ];
 
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
