@@ -12,6 +12,7 @@ import 'package:ecommerce_seller/features/auth/signup/provider/checkbox_provider
 import 'package:ecommerce_seller/features/auth/signup/provider/dropdown_provider.dart';
 import 'package:ecommerce_seller/features/auth/signup/provider/signup_loading.dart';
 import 'package:ecommerce_seller/features/drawer/provider/drawer_provider.dart';
+import 'package:ecommerce_seller/features/product_management/provider/product_provider.dart';
 import 'package:ecommerce_seller/features/splash_screen/screns/splash_screen.dart';
 import 'package:ecommerce_seller/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,6 +46,7 @@ try {
           ChangeNotifierProvider(create: (_) => VariantProvider()),
           ChangeNotifierProvider(create: (_) => ProductUploadProvider()),
 ChangeNotifierProvider(create: (_) => VariationCustomeProvider()),
+ ChangeNotifierProvider(create: (_) => ProductProvider()),
         // add more providers here if needed
         
       ],

@@ -15,5 +15,22 @@ static const whitecolor = Colors.white;
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
+
+  // product management 
+
+ static const Color bagroundcolorproduct = Color(0xFFF5F6FA);
+ static const Color primaryColor = Color(0xFF4361EE);
+ static const Color textPrimary = Color(0xFF1A1D2E);
+ static const Color textSecondary = Color(0xFF8A8D9F);
+ static const Color activeGreen = Color(0xFF2DC653);
+ static const Color inactiveRed = Color(0xFFE63946);
+ static const Color electronicsBlue = Color(0xFFE8EFFE);
+ static const Color electronicsTextBlue = Color(0xFF4361EE);
+ static const Color fashionPurple = Color(0xFFF3EEFF);
+ static const Color fashionTextPurple = Color(0xFF7B2FBE);
+ static const Color borderColor = Color(0xFFEEEFF4);
+ static const Color defaultBg = Color(0xFFEEEFF4);
+ static  const Color defaultText = Color(0xFF8A8D9F);
+
     
 }

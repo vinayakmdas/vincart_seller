@@ -21,7 +21,7 @@ class Drawerscreen extends StatelessWidget {
       case 1:
         return Addproduct();
       case 2:
-        return ProductMenagement();
+        return ProductManagementScreen();
       case 3:
         return OrderScreen();
       case 4:
